@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS musician (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS musician_id_uidx ON musician(id);
+CREATE UNIQUE INDEX IF NOT EXISTS musician_name_uidx ON musician(name);
 
 CREATE TABLE IF NOT EXISTS ensemble_type (
     type VARCHAR NOT NULL
@@ -32,7 +33,7 @@ CREATE SEQUENCE ensemble_id_seq
 CREATE TABLE IF NOT EXISTS ensemble (
     id BIGINT NOT NULL DEFAULT nextval('ensemble_id_seq'),
     name VARCHAR NOT NULL,
-    type VARCHAR NOT NULL REFERENCES ensemble_type(type) ON DELETE CASCADE
+    type VARCHAR NOT NULL REFERENCES ensemble_type(type) ON DELETE CASCADE,
     description VARCHAR
 );
 

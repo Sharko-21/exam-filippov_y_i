@@ -1,12 +1,12 @@
-const { Client } = require('pg')
-const client = new Client({
-    user: 'filippov',
-    host: 'ws-db',
-    database: 'music_shop',
-    password: 'qwerty1234',
-    port: 5432,
-});
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
-return client.connect().then(() => {
-    console.log("connected!");
-}).catch(res => console.log(res));
+const express  = require('express');
+const api = require('./api/api.js');
+
+console.log("Starting...");
+let app = express();
+api.middleware.init(app);
+api.controllers.init(app);
+
+app.listen(80);
+console.log("App is started...");

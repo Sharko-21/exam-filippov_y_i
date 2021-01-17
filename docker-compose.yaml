@@ -20,7 +20,7 @@ services:
           - api
     volumes:
       - ./app:/var/app
-    command: bash -c "npm install -g nodemon && nodemon --config /var/app/nodemon.json /var/app/index.js"
+    command: bash -c "cd /var/app && npm start"
   ws-db:
     image: 'postgres:11.5'
     container_name: "ws-db"
