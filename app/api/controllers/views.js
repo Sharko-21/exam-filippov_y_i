@@ -21,9 +21,7 @@ function init(app) {
                 date: new Date(musician.date),
                 description: musician.description,
             }));
-            console.log(musician)
         } catch (e) {
-            console.log(e);
             res.send("Something went wrong...");
         }
     });
