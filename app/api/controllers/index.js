@@ -1,7 +1,9 @@
-const pages = require("./views");
+const views = require("./views");
+const images = require("./images");
 
 function init(app) {
-    pages.init(app);
+    views.init(app);
+    images.init(app);
 }
 
 module.exports = {

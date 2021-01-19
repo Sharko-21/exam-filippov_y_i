@@ -9,8 +9,13 @@ module.exports = {
   /*
       Sorted by alphabet, please maintain it that way
    */
+  image: {
+    insert: sql('image/insert.sql')
+  },
   musician: {
     findByID: sql('musician/findByID.sql'),
+    insert: sql('musician/insert.sql'),
+    updateImage: sql('musician/updateImage.sql'),
   }
 };
 

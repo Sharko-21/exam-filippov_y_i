@@ -1,6 +1,5 @@
 const bodyParser = require('body-parser');
 const express  = require('express');
-const path = require('path');
 
 function init(app) {
     app.use(bodyParser.json());       // to support JSON-encoded bodies

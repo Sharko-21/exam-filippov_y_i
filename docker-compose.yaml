@@ -6,6 +6,7 @@ networks:
 services:
   api:
     image: 'node:14.15.4-stretch'
+    container_name: "api"
     ports:
       - 443:443
       - 80:80
