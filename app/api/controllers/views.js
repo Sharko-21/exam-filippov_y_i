@@ -12,7 +12,8 @@ function init(app) {
 
     app.get("/", (req, res) => {
         res.send(jade.render(views.home, {
-            filename: path.join('/var/app/static/views/index.jade')
+            filename: path.join('/var/app/static/views/index.jade'),
+            isAdmin: true
         }));
     });
 
@@ -26,7 +27,8 @@ function init(app) {
                 date: new Date(musician.date),
                 description: musician.description,
                 image: musician.image,
-                filename: path.join('/var/app/static/views/index.jade')
+                filename: path.join('/var/app/static/views/index.jade'),
+                isAdmin: true
             }));
         } catch (e) {
             res.send("Something went wrong...");
@@ -43,7 +45,8 @@ function init(app) {
                 name: ensemble.name,
                 description: ensemble.description,
                 type: ensemble.type,
-                filename: path.join('/var/app/static/views/index.jade')
+                filename: path.join('/var/app/static/views/index.jade'),
+                isAdmin: true
             }));
         } catch (e) {
             if (e.received === 0) {
@@ -59,7 +62,6 @@ function init(app) {
             let composition = await db.one(sql.composition.findByIDs, {
                 ids: sqlHelpers.arrayToSqlIn([req.params.id])
             });
-            console.log(composition);
             if (composition.length === 0) {
                 res.send("Такая композиция не найдена...");
                 return;
@@ -69,12 +71,41 @@ function init(app) {
                 name: composition.name,
                 description: composition.description,
                 date: composition.date,
-                filename: path.join('/var/app/static/views/composition.jade')
+                filename: path.join('/var/app/static/views/composition.jade'),
+                isAdmin: true
+            }));
+        } catch (e) {
+            if (e.received === 0) {
+                res.send("Такая композиция не найдена...");
+                return;
+            }
+            res.send("Something went wrong...");
+        }
+    });
+
+    app.get("/plate/:id", async (req, res) => {
+        try {
+            let plate = await db.one(sql.plate.findByIDs, {
+                ids: sqlHelpers.arrayToSqlIn([req.params.id])
+            });
+            if (plate.length === 0) {
+                res.send("Такая плстинка не найдена...");
+                return;
+            }
+            res.send(jade.render(views.plate, {
+                id: plate.id,
+                name: plate.name,
+                description: plate.description,
+                date: plate.date,
+                producedBy: plate.producedBy,
+                retailPrice: plate.retailPrice,
+                filename: path.join('/var/app/static/views/plate.jade'),
+                isAdmin: true
             }));
         } catch (e) {
             console.log(e);
             if (e.received === 0) {
-                res.send("Такая композиция не найдена...");
+                res.send("Такая плстинка не найдена...");
                 return;
             }
             res.send("Something went wrong...");
@@ -87,7 +118,8 @@ function loadViews() {
         "/var/app/static/views/home.jade",
         "/var/app/static/views/musician.jade",
         "/var/app/static/views/ensemble.jade",
-        "/var/app/static/views/composition.jade"
+        "/var/app/static/views/composition.jade",
+        "/var/app/static/views/plate.jade",
     ];
     viewsPath.forEach(viewPath => {
         let path = viewPath.split('/');

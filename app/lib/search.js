@@ -25,6 +25,14 @@ const ByComposition = async filters => {
     });
 };
 
+const ByPlate = async filters => {
+    return db.manyOrNone(sql.plate.findByName, {
+        name: filters.name
+    }).then(plates => {
+        return plates;
+    });
+};
+
 module.exports = {
-    ByEnsemble, ByMusician, ByComposition
+    ByEnsemble, ByMusician, ByComposition, ByPlate
 };

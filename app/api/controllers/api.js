@@ -6,24 +6,26 @@ const search = require('../../lib/search');
 function init(app) {
     app.get("/search", async (req, res) => {
         let result;
+        let errNo = 0;
         switch (req.query.type) {
             case "ensemble":
                 result = await search.ByEnsemble(req.query.filters);
                 break;
             case "musician":
-                console.log("here");
                 result = await search.ByMusician(req.query.filters);
-                console.log(result);
                 break;
             case "composition":
                 result = await search.ByComposition(req.query.filters);
                 break;
+            case "plate":
+                result = await search.ByPlate(req.query.filters);
+                break;
             default:
-                res.send("ooooops...");
-                return
+                errNo = 1;
+                break;
         }
         res.send(JSON.stringify({
-            errNo: 0,
+            errNo: errNo,
             response: result
         }));
     });
@@ -86,6 +88,50 @@ function init(app) {
             if (e.received === 0) {
                 return res.send(JSON.stringify(result));
             }
+            result.errNo = 1;
+            return res.send(JSON.stringify(result));
+        }
+    });
+
+    app.post("/plate/:id/buy", async (req, res) => {
+        let result = {errNo: 0, response: []};
+        return db.tx(async tx => {
+            tx.none(sql.plate.buy, {
+                plateID: req.params.id
+            }).then(() => {
+                res.send(JSON.stringify(result));
+            });
+        }).catch(e => {
+            result.errNo = 1;
+            res.send(result);
+        });
+    });
+
+    app.post("/plate", async (req, res) => {
+        let result = {errNo: 0, response: []};
+        try {
+            if (req.body.id !== 0) {
+                await db.none(sql.plate.update, req.body);
+            } else {
+                await db.none(sql.plate.create, req.body);
+            }
+            return res.send(JSON.stringify(result));
+        } catch (e) {
+            result.errNo = 1;
+            return res.send(JSON.stringify(result));
+        }
+    });
+
+    app.post("/ensemble", async (req, res) => {
+        let result = {errNo: 0, response: []};
+        try {
+            if (req.body.id !== 0) {
+                await db.none(sql.ensemble.update, req.body);
+            } else {
+                await db.none(sql.ensemble.create, req.body);
+            }
+            return res.send(JSON.stringify(result));
+        } catch (e) {
             result.errNo = 1;
             return res.send(JSON.stringify(result));
         }
