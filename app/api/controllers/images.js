@@ -16,7 +16,7 @@ function init(app) {
         const ext = path.extname(req.file.originalname).toLowerCase();
         return Promise.resolve().then(() => {
             return db.tx(async tx => {
-                if (ext === ".png" || ext === ".jpg") {
+                if (ext === ".png") {
                     return tx.one(sql.image.insert)
                         .then(image => tx.none(sql.musician.updateImage, {
                                 id: req.params.id,

@@ -1,0 +1,20 @@
+doctype html
+html
+    include base.jade
+    script(src="/static/js/home.js")
+    body
+        div(class="row")
+            div(class="col-md-5 mb-3" style="max-width:250px; margin-left: 22px;")
+                label(for="type") Поиск по:
+                select(class="custom-select d-block w-100", id="type", required)
+                    option(value="ensemble") Ансамблям
+                    option(value="musician") Музыкантам
+                    option(value="composition") Композициям
+            div(class="col-md-6 mb-3" style="max-width:450px;")
+                label(for="name") Название:
+                input(type="text", class="form-control", id="name", placeholder="Введите название", value="", required)
+                div(class="invalid-feedback") Valid first name required
+            span(class="form-inline my-2 my-lg-0" style="margin-top: 13px !important;")
+                button(class="btn btn-secondary my-2 my-sm-0" id="search") Искать
+        div(class="row cards" style="margin-left: 8px")
+

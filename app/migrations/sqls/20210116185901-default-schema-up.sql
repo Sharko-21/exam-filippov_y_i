@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS composition (
     id BIGINT NOT NULL DEFAULT nextval('composition_id_seq'),
     name VARCHAR NOT NULL,
     date TIMESTAMP WITHOUT TIME ZONE,
-    ensemble BIGINT NOT NULL REFERENCES ensemble(id) ON DELETE CASCADE,
+    ensemble_id BIGINT NOT NULL REFERENCES ensemble(id) ON DELETE CASCADE,
     description VARCHAR
 );
 
