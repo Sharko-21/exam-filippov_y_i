@@ -127,12 +127,6 @@ function savePlate() {
 }
 
 function saveEnsemble() {
-    let request = {
-        id: appState.modalParams.elemID,
-        name: $("#ensembleName").val(),
-        description: $("#description").val(),
-        type: $("#ensemble_type").val()
-    };
     let name = $("#ensembleName").val();
     let description = $("#description").val();
     let type = $("#ensemble_type").val();
@@ -278,8 +272,7 @@ function createCard(params, isAdmin) {
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <button type="button" onclick='relocateTo("/${params.type}/${params.id}")' class="btn btn-sm btn-outline-secondary">Просмотреть</button>
-                  ${isAdmin && '<button type="button" id="change" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal" value=\"' + params.id + '\">Редактировать</button>'}
-                  <!--<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
+                  ${isAdmin && '<button type="button" id="change" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal" value=\"' + params.id + '\">Редактировать</button>' || ''}
                 </div>
                 <small class="text-muted">9 mins</small>
               </div>

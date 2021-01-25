@@ -13,7 +13,7 @@ function init(app) {
     app.get("/", (req, res) => {
         res.send(jade.render(views.home, {
             filename: path.join('/var/app/static/views/index.jade'),
-            isAdmin: true
+            isAdmin: req.session.isAdmin || false
         }));
     });
 
@@ -28,7 +28,7 @@ function init(app) {
                 description: musician.description,
                 image: musician.image,
                 filename: path.join('/var/app/static/views/index.jade'),
-                isAdmin: true
+                isAdmin: req.session.isAdmin
             }));
         } catch (e) {
             res.send("Something went wrong...");
@@ -46,7 +46,7 @@ function init(app) {
                 description: ensemble.description,
                 type: ensemble.type,
                 filename: path.join('/var/app/static/views/index.jade'),
-                isAdmin: true
+                isAdmin: req.session.isAdmin
             }));
         } catch (e) {
             if (e.received === 0) {
@@ -72,7 +72,7 @@ function init(app) {
                 description: composition.description,
                 date: composition.date,
                 filename: path.join('/var/app/static/views/composition.jade'),
-                isAdmin: true
+                isAdmin: req.session.isAdmin
             }));
         } catch (e) {
             if (e.received === 0) {
@@ -100,7 +100,7 @@ function init(app) {
                 producedBy: plate.producedBy,
                 retailPrice: plate.retailPrice,
                 filename: path.join('/var/app/static/views/plate.jade'),
-                isAdmin: true
+                isAdmin: req.session.isAdmin
             }));
         } catch (e) {
             console.log(e);

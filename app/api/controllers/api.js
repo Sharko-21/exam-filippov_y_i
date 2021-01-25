@@ -2,6 +2,7 @@ const sql = require('../../sql');
 const db = require('../../lib/db');
 const sqlHelpers = require('../../lib/sqlHelpers');
 const search = require('../../lib/search');
+const md5 = require('md5');
 
 function init(app) {
     app.get("/search", async (req, res) => {
@@ -108,6 +109,10 @@ function init(app) {
     });
 
     app.post("/plate", async (req, res) => {
+        if (!req.session.isAdmin) {
+            res.status(401);
+            return res.send("Invalid session");
+        }
         let result = {errNo: 0, response: []};
         try {
             if (req.body.id !== 0) {
@@ -123,6 +128,10 @@ function init(app) {
     });
 
     app.post("/ensemble", async (req, res) => {
+        if (!req.session.isAdmin) {
+            res.status(401);
+            return res.send("Invalid session");
+        }
         let result = {errNo: 0, response: []};
         try {
             if (req.body.id !== 0) {
@@ -135,6 +144,33 @@ function init(app) {
             result.errNo = 1;
             return res.send(JSON.stringify(result));
         }
+    });
+
+    app.post("/login", async (req, res) => {
+        let result = {errNo: 0, response: []};
+        try {
+            console.log(req.body);
+            let admin = await db.one(sql.admin.findByEmail, {
+                email: req.body.email
+            });
+
+            if (admin.password === md5(req.body.password)) {
+                req.session.isAdmin = true;
+            } else {
+                result.errNo = 1;
+            }
+            return res.send(JSON.stringify(result));
+        } catch (e) {
+            result.errNo = 1;
+            console.log(e);
+            return res.send(JSON.stringify(result));
+        }
+    });
+
+    app.get("/logout", async (req, res) => {
+        let result = {errNo: 0, response: []};
+        req.session.isAdmin = false;
+        res.send(JSON.stringify(result));
     });
 }
 

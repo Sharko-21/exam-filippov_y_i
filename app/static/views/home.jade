@@ -19,8 +19,9 @@ html
                 div(class="invalid-feedback") Valid first name required
             span(class="form-inline my-2 my-lg-0" style="margin-top: 13px !important;")
                 button(class="btn btn-secondary my-2 my-sm-0" id="search") Искать
-            span(class="form-inline my-2 my-lg-0 create_block" style="margin-top: 13px !important; margin-left: 10px;")
-                button(class="btn btn-secondary my-2 my-sm-0" id="create_plate" data-toggle="modal" data-target="#myModal") Добавить
+            if isAdmin
+                span(class="form-inline my-2 my-lg-0 create_block" style="margin-top: 13px !important; margin-left: 10px;")
+                    button(class="btn btn-secondary my-2 my-sm-0" id="create_plate" data-toggle="modal" data-target="#myModal") Добавить
         div(class="row cards" style="margin-left: 8px")
         div(class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
             div(class="modal-dialog" role="document")

@@ -9,6 +9,9 @@ module.exports = {
   /*
       Sorted by alphabet, please maintain it that way
    */
+  admin: {
+    findByEmail: sql('admin/findByEmail.sql')
+  },
   composition: {
     findByEnsembleID: sql('composition/findByEnsembleID.sql'),
     findByIDs: sql('composition/findByIDs.sql'),
