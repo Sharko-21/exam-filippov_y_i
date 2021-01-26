@@ -36,6 +36,7 @@ module.exports = {
   plate: {
     buy: sql('plate/buy.sql'),
     create: sql('plate/create.sql'),
+    findByEnsembleID: sql('plate/findByEnsembleID.sql'),
     findByIDs: sql('plate/findByIDs.sql'),
     findByName: sql('plate/findByName.sql'),
     update: sql('plate/update.sql'),

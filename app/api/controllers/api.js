@@ -33,12 +33,10 @@ function init(app) {
 
     app.get("/ensemble/:id/compositions", async (req, res) => {
         let result = {errNo: 0, response: []};
-        console.log(req.params.id);
         try {
             let compositions = await db.manyOrNone(sql.composition.findByEnsembleID, {
                 id: req.params.id,
             });
-            console.log("ooo", compositions);
             if (compositions.length > 0) {
                 result.response = compositions;
             }
@@ -74,18 +72,34 @@ function init(app) {
 
     app.get("/ensemble/:id/musicians", async (req, res) => {
         let result = {errNo: 0, response: []};
-        console.log(req.params.id);
         try {
             let musicians = await db.manyOrNone(sql.musician.findByEnsembleID, {
                 id: req.params.id,
             });
-            console.log("ooo", musicians);
             if (musicians.length > 0) {
                 result.response = musicians;
             }
             return res.send(JSON.stringify(result));
         } catch (e) {
-            console.log(e);
+            if (e.received === 0) {
+                return res.send(JSON.stringify(result));
+            }
+            result.errNo = 1;
+            return res.send(JSON.stringify(result));
+        }
+    });
+
+    app.get("/ensemble/:id/plates", async (req, res) => {
+        let result = {errNo: 0, response: []};
+        try {
+            let plates = await db.manyOrNone(sql.plate.findByEnsembleID, {
+                id: req.params.id,
+            });
+            if (plates.length > 0) {
+                result.response = plates;
+            }
+            return res.send(JSON.stringify(result));
+        } catch (e) {
             if (e.received === 0) {
                 return res.send(JSON.stringify(result));
             }
@@ -149,7 +163,6 @@ function init(app) {
     app.post("/login", async (req, res) => {
         let result = {errNo: 0, response: []};
         try {
-            console.log(req.body);
             let admin = await db.one(sql.admin.findByEmail, {
                 email: req.body.email
             });
