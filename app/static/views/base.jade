@@ -21,20 +21,21 @@ html
                     else
                         li(class="nav-item")
                             a(id="admin_popup" class="nav-link" href="#" data-toggle="modal" data-target="#myModalAdmin") Войти
-        div(class="modal fade" id="myModalAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalAdminLabel" aria-hidden="true")
-            div(class="modal-dialog" role="document")
-                div(class="modal-content")
-                    div(class="modal-header")
-                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-                            span(aria-hidden="true") &times;
-                        h4(class="modal-title") Modal title
-                    div(class="modal-body")
-                        div(class="form-group")
-                            label(for="email") email:
-                            input(type="text" class="form-control" id="email" placeholder="Введите email")
-                        div(class="form-group")
-                            label(for="password") Пароль:
-                            input(type="password" class="form-control" id="password" placeholder="Введите пароль")
-                    div(class="modal-footer")
-                        button(type="button" class="btn btn-secondary" data-dismiss="modal" id = "close_modal_admin") Закрыть
-                        button(type="button" class="btn btn-primary modal_login_admin") Войти
+        if !isAdmin
+            div(class="modal fade" id="myModalAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalAdminLabel" aria-hidden="true")
+                div(class="modal-dialog" role="document")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                            h4(class="modal-title") Modal title
+                        div(class="modal-body")
+                            div(class="form-group")
+                                label(for="email") email:
+                                input(type="text" class="form-control" id="email" placeholder="Введите email")
+                            div(class="form-group")
+                                label(for="password") Пароль:
+                                input(type="password" class="form-control" id="password" placeholder="Введите пароль")
+                        div(class="modal-footer")
+                            button(type="button" class="btn btn-secondary" data-dismiss="modal" id = "close_modal_admin") Закрыть
+                            button(type="button" class="btn btn-primary modal_login_admin") Войти

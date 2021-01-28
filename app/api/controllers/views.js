@@ -88,6 +88,9 @@ function init(app) {
             let plate = await db.one(sql.plate.findByIDs, {
                 ids: sqlHelpers.arrayToSqlIn([req.params.id])
             });
+            let compositions = await db.manyOrNone(sql.composition.findByPlateID, {
+                id: plate.id,
+            });
             if (plate.length === 0) {
                 res.send("Такая плстинка не найдена...");
                 return;
@@ -100,7 +103,8 @@ function init(app) {
                 producedBy: plate.producedBy,
                 retailPrice: plate.retailPrice,
                 filename: path.join('/var/app/static/views/plate.jade'),
-                isAdmin: req.session.isAdmin || false
+                isAdmin: req.session.isAdmin || false,
+                compositions: compositions || []
             }));
         } catch (e) {
             console.log(e);

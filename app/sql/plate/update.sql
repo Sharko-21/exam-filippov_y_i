@@ -8,4 +8,4 @@ SET
     wholesale_price = ${wholesalePrice},
     wholesaler = ${wholesaler}
 WHERE
-    id = ${id}
+    id = ${id};

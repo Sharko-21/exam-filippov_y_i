@@ -15,6 +15,7 @@ $(document).on("click", "#create_plate", function () {
     appState.modalParams.mode = "create";
     appState.modalParams.type = "plate";
     appState.modalParams.elemID = 0;
+    appState.modalParams.ensembleID = null;
     initModal("plate", {
         id: 0,
         name: "",
@@ -30,6 +31,7 @@ $(document).on("click", "#create_ensemble", function () {
     appState.modalParams.mode = "create";
     appState.modalParams.type = "ensemble";
     appState.modalParams.elemID = 0;
+    appState.modalParams.ensembleID = null;
     initModal("ensemble", {
         id: 0,
         name: "",
@@ -168,6 +170,7 @@ $(document).on("click", "#change", function () {
             return elem;
         }
     });
+    appState.modalParams.ensembleID = data.ensembleId || null;
     initModal(type, data)
 });
 
@@ -185,6 +188,7 @@ function initModal(type, data) {
     $(".modal-body").html(modalBody);
 }
 function getPlateModalBody(data) {
+    let compositions = getPlateCompositionsBody(data);
     return `
         <div class="form-group">
             <label for="plateName">Имя: </label>
@@ -210,7 +214,74 @@ function getPlateModalBody(data) {
             <label for="wholesalePrice">Оптовая цена: </label>
             <input type="number" class="form-control" id="wholesalePrice" type="wholesalePrice" value="${data.wholesalePrice}" min="1"/>
         </div>
+        <div class="form-group">
+            ${appState.modalParams.elemID !== 0 && `<label for="newSong">Добавить песню: </label>
+            <input type="text" class="form-control" id="newSong"/>
+            <input id="addComposition" type="button" class="btn btn-primary" value="Добавить">` || ""}
+        </div>
+        <div class="list-group list-compositions">
+            ${compositions}
+        </div>
     `;
+}
+
+$(document).on("click", "#addComposition", function () {
+    let name = $("#newSong").val();
+    if (name.length === 0) {
+        alert("Введите название добавляемой песни!");
+        return;
+    }
+
+    $.post({
+        url: "/plate_composition",
+        contentType: "application/json",
+        data: JSON.stringify({
+            plateId: appState.modalParams.elemID,
+            ensembleId: appState.modalParams.ensembleID,
+            compositionName: name,
+        }),
+        success: function (data) {
+            let result = JSON.parse(data);
+            if (result.errNo === 0) {
+                alert("Успешно добавлено!");
+                $(".list-compositions").append(`<a onclick="deleteFromPlate(${result.response})" href="#" id="composition_${result.response}" class="list-group-item list-group-item-action">${name}</a>`)
+            } else {
+                alert("Данная песня не найдена у ансамбля пластинки!")
+            }
+        },
+    });
+});
+
+function deleteFromPlate(compositionID) {
+    $.ajax({
+        type: 'DELETE',
+        url: "/plate_composition",
+        contentType: "application/json",
+        data: JSON.stringify({
+            compositionId: compositionID
+        }),
+        success: function (data) {
+            let result = JSON.parse(data);
+            if (result.errNo === 0) {
+                alert("Успешно удалено!");
+                $(`#composition_${compositionID}`).remove();
+            } else {
+                alert("Что-то пошло не так!")
+            }
+        },
+    });
+}
+
+function getPlateCompositionsBody(data) {
+    console.log(data);
+    if (!data.compositionName || data.compositionName.length === 0 || !data.compositionName[0]) {
+        return [];
+    }
+    let res = "";
+    data.compositionName.forEach((composition, i) => {
+        res += `<a onclick="deleteFromPlate(${data.compositionIds[i]})" href="#" id="composition_${data.compositionIds[i]}" class="list-group-item list-group-item-action">${composition}</a>`
+    });
+    return res;
 }
 
 function getEnsembleModalBody(data) {
@@ -274,7 +345,6 @@ function createCard(params, isAdmin) {
                   <button type="button" onclick='relocateTo("/${params.type}/${params.id}")' class="btn btn-sm btn-outline-secondary">Просмотреть</button>
                   ${isAdmin && '<button type="button" id="change" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#myModal" value=\"' + params.id + '\">Редактировать</button>' || ''}
                 </div>
-                <small class="text-muted">9 mins</small>
               </div>
             </div>
           </div>

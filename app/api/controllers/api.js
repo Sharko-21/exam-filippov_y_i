@@ -136,6 +136,7 @@ function init(app) {
             }
             return res.send(JSON.stringify(result));
         } catch (e) {
+            console.log(e);
             result.errNo = 1;
             return res.send(JSON.stringify(result));
         }
@@ -184,6 +185,43 @@ function init(app) {
         let result = {errNo: 0, response: []};
         req.session.isAdmin = false;
         res.send(JSON.stringify(result));
+    });
+
+    app.post("/plate_composition", async (req, res) => {
+        if (!req.session.isAdmin) {
+            res.status(401);
+            return res.send("Invalid session");
+        }
+        console.log(req.body);
+        let result = {errNo: 0, response: 0};
+        try {
+            let compositionId = await db.one(sql.plate.addCompositionByName, req.body);
+            if (!compositionId || compositionId === 0) {
+                result.errNo = 1;
+            }
+            result.response = compositionId;
+            return res.send(JSON.stringify(result));
+        } catch (e) {
+            result.errNo = 1;
+            console.log(e);
+            return res.send(JSON.stringify(result));
+        }
+    });
+    app.delete("/plate_composition", async (req, res) => {
+        if (!req.session.isAdmin) {
+            res.status(401);
+            return res.send("Invalid session");
+        }
+        console.log(req.body);
+        let result = {errNo: 0, response: 0};
+        try {
+            await db.none(sql.plate.deleteCompositionFromPlateByID, req.body);
+            return res.send(JSON.stringify(result));
+        } catch (e) {
+            result.errNo = 1;
+            console.log(e);
+            return res.send(JSON.stringify(result));
+        }
     });
 }
 

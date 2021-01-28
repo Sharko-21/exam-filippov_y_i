@@ -16,6 +16,7 @@ module.exports = {
     findByEnsembleID: sql('composition/findByEnsembleID.sql'),
     findByIDs: sql('composition/findByIDs.sql'),
     findByName: sql('composition/findByName.sql'),
+    findByPlateID: sql('composition/findByPlateID.sql'),
   },
   ensemble: {
     create: sql('ensemble/create.sql'),
@@ -34,8 +35,10 @@ module.exports = {
     updateImage: sql('musician/updateImage.sql'),
   },
   plate: {
+    addCompositionByName: sql('plate/addCompositionByName.sql'),
     buy: sql('plate/buy.sql'),
     create: sql('plate/create.sql'),
+    deleteCompositionFromPlateByID: sql('plate/deleteCompositionFromPlateByID.sql'),
     findByEnsembleID: sql('plate/findByEnsembleID.sql'),
     findByIDs: sql('plate/findByIDs.sql'),
     findByName: sql('plate/findByName.sql'),
