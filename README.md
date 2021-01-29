@@ -2,6 +2,8 @@
 
 Оригинальный репозиторий https://github.com/Sharko-21/exam-filippov_y_i
 
+Тема проекта - Приложение музыкального магазина
+
 ## Оглавление
 0. [Установка docker](#Установка-docker)
 1. [Установка docker-compose](#Установка-docker-compose) 
