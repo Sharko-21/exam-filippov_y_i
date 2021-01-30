@@ -1,4 +1,5 @@
 const db = require('../../lib/db');
+const date = require('../../lib/date');
 const sqlHelpers = require('../../lib/sqlHelpers');
 const sql = require('../../sql');
 const jade = require('jade');
@@ -22,9 +23,10 @@ function init(app) {
             let musician = await db.one(sql.musician.findByID, {
                 id: req.params.id
             });
+            console.log(date.format(musician.date));
             res.send(jade.render(views.musician, {
                 name: musician.name,
-                date: new Date(musician.date),
+                date: date.format(musician.date),
                 description: musician.description,
                 image: musician.image,
                 filename: path.join('/var/app/static/views/index.jade'),
@@ -70,11 +72,12 @@ function init(app) {
                 id: composition.id,
                 name: composition.name,
                 description: composition.description,
-                date: composition.date,
+                date: date.format(composition.date),
                 filename: path.join('/var/app/static/views/composition.jade'),
                 isAdmin: req.session.isAdmin || false
             }));
         } catch (e) {
+            console.log(e);
             if (e.received === 0) {
                 res.send("Такая композиция не найдена...");
                 return;
@@ -99,7 +102,7 @@ function init(app) {
                 id: plate.id,
                 name: plate.name,
                 description: plate.description,
-                date: plate.date,
+                date: date.format(plate.date),
                 producedBy: plate.producedBy,
                 retailPrice: plate.retailPrice,
                 filename: path.join('/var/app/static/views/plate.jade'),
